@@ -1,6 +1,6 @@
 const express = require('express')
 const path = require('path')
-
+const jQuery = require('jquery')
 const http = require('http')
 const socketIO = require('socket.io')
 
@@ -35,7 +35,21 @@ io.on('connection', (socket) => {
         createdAt: new Date().getTime()
     })
 
+    socket.on('createMessage', (user) => {
+        console.log(user)
 
+        socket.emit('groupChat', {
+            from: 'Me',
+            text:user.text,
+            
+        })
+        socket.broadcast.emit('groupChat', {
+            from: 'Anonmyous',
+            text:user.text,
+            
+        })
+    })
+    
     socket.on('disconnect', () => {
         console.log('Client Disconnected')
     })
