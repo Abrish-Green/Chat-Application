@@ -1,12 +1,13 @@
 var socket = io()
 var messages = jQuery('ol')
+
 socket.on('newUser', (message) => {
     console.log(`${message.text} from ${message.from}`)
     console.log(message)
     messages.append(`<li> ${message.from}: ${message.text}</li>`)
 })
 
-jQuery('#message-form').on('submit', function (e) { 
+jQuery('#send').on('click', function (e) { 
     e.preventDefault()
     console.log(jQuery("#message").val())
 
@@ -17,6 +18,18 @@ jQuery('#message-form').on('submit', function (e) {
     })
 })
 
+jQuery('#ip').on('click', function(e) {
+    e.preventDefault()
+    socket.emit('ip')
+    console.log('clicked')
+})
+
+socket.on('getIP', function (message) {
+    console.log(message.ip)
+    messages.append(`<li> ${message.from}: ${message.ip}</li>`)
+    console.log('clicked')
+
+    })
 socket.on('groupChat', function(message){
     messages.append(`<li> ${message.from}: ${message.text}</li>`)
 })

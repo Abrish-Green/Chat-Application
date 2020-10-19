@@ -1,0 +1,64 @@
+* {
+    margin: 0px;
+    padding: 0px;
+
+}
+
+body {
+    background-color: rgba(213, 233, 228, 0.5)
+}
+
+#chat-room {
+    height: 99vh;
+    width: 99%;
+    border: 1px solid #111
+}
+
+#chat-left {
+    height: 99vh;
+    width: 30%;
+    float: left;
+    background-color: rgba(2, 66, 50, 0.5);
+    border: 1px solid #111
+}
+
+#chat-left h2 {
+    padding: 15px;
+}
+
+#chat-conversation {
+    padding: 5;
+    height: 90vh;
+    float: left;
+    width: 69.7%;
+    border: 1px solid #111;
+    overflow-y: scroll;
+
+}
+
+#chat-conversation ol {
+    padding: 5%;
+
+}
+
+#chat-control {
+    background-color: rgba(11, 20, 15, 0.5);
+    width: 69.8%;
+    height: 9vh;
+    float: left;
+}
+
+#chat-control input[type=text] {
+    padding: 0% 2%;
+    width: 74%;
+    height: 88%;
+}
+
+#chat-control #send,
+#ip {
+    padding: 2% 1.7%;
+    color: white;
+    cursor: pointer;
+    border: 1px solid white;
+    background-color: rgba(46, 122, 80, 0.5)
+}

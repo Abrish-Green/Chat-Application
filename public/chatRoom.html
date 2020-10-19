@@ -1,21 +1,38 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <p>Chat Room</p>
-    <form id="message-form">
-        <ol>
-            
-        </ol>
-        <input type="text" name="message" id="message" placeholder="Message">
-        <button>Send</button>
 
-    </form>
+    <div class="chat-room" id="chat-room">
+
+        <div class="chat-left" id="chat-left">
+
+            <h2>People</h2>
+
+        </div>
+
+        <div class="chat-right" id="chat-right">
+
+            <div class="chat-conversation" id="chat-conversation">
+                  <ol>Result</ol>
+            </div>
+                <div class="chat-control" id="chat-control">
+                        <form id="message-form"></form>
+                            <input type="text" name="message" id="message" placeholder="Message">
+                            <button id="send">Send</button>
+                            <button id="ip">Send Ip Addess</button>
+                    </form>
+            </div>
+        </div>
+
+
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/lib/jquery-3.5.1.min.js"></script>
     <script src="/js/chatRoom.js"></script>
-    
+
 </body>
 </html>
