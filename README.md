@@ -34,10 +34,10 @@ dependencies”: {
  “express”: “⁴.16.3”
  }
  `
-Next we will create a server.js file.
+### Next we will create a server.js file.
 
 In this file we need to require Express and create a reference to a variable from an instance of Express. Static contents like HTML, CSS or JavaScript can be served using express.js:
-
+```
 var express = require(‘express’);
 
 var app = express();
@@ -46,10 +46,11 @@ and we can start listening to a port using the code:
 var server = app.listen(3000, () => {
  console.log(‘server is running on port’, server.address().port);
 });
+```
 Now we need to create an HTML file index.html that displays our UI. I have added bootstrap and JQuery cdn.
 
 //index.html
-
+``
 <!DOCTYPE html>
 <html>
 <head>
@@ -77,22 +78,23 @@ Now we need to create an HTML file index.html that displays our UI. I have added
 </script>
 </body>
 </html>
+``
 Please note that the empty <script> <;/script>tag will be the place where we will write the client side JavaScript code.
 
 In-order to tell Express that, we will be using a static file. We will add a new line inside server.js:
 
-app.use(express.static(__dirname));
+`app.use(express.static(__dirname));`
 We can run the server.js using the command
 
-node ./server.js
+`node ./server.js`
 or a package called nodemon, so that the changes made in the code will be automatically detected. We will download nodemon using the command
 
-npm install -g nodemon
+`npm install -g nodemon`
 -g — global, so that it is accessible in all projects.
 
 We will run the code using the command
 
-nodemon ./server.js
+`nodemon ./server.js`
 If you go to localhost:3000 we can see the index file:
 
 caxmtV7tYzJ1EUU69TeX4YQVsC69EhgzcSL5
@@ -102,13 +104,13 @@ Now that our server is up and running, we need to create our database. For this 
 UWJYcDmpxrFhUoKRCrgkhtaTcBD4z4NivreC
 In-order to connect this database to the app, we will use another package called Mongoose.
 
-Mongoose
+## Mongoose
 Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment. Mongoose can be installed using the command
 
 npm install -s mongoose
 Inside server.js we will require mongoose:
 
-var mongoose = require(‘mongoose’);
+` var mongoose = require(‘mongoose’);
 And we will assign a variable, the URL of our mlab database:
 
 var dbUrl = ‘mongodb://username:pass@ds257981.mlab.com:57981/simple-chat’
@@ -117,22 +119,23 @@ Mongoose will connect to the mlab database with the connect method:
 mongoose.connect(dbUrl , (err) => { 
    console.log(‘mongodb connected’,err);
 })
+ `
 And we will be defining our message model as
 
 var Message = mongoose.model(‘Message’,{ name : String, message : String})
 We can implement the chat logic now. But before that there is one more package that needs to be added.
 
-Body-Parser
+## Body-Parser
 Body-Parser extracts the entire body portion of an incoming request stream and exposes it on req.body. The middleware was a part of Express.js earlier, but now you have to install it separately.
 
 Install it using the following command:
 
-npm install -s body-parser
+`npm install -s body-parser
 Add the following codes to server.js:
 
 var bodyParser = require(‘body-parser’)
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: false}))`
 Routing
 Routing refers to how an application’s endpoints (URIs) respond to client requests. You define routing using methods of the Express app object that correspond to HTTP methods: app.get() to handle GET requests and app.post() to handle POST requests.
 
@@ -144,23 +147,23 @@ Inside server.js:
 
 get : will get all the message from database
 
-app.get('/messages', (req, res) => {
+``app.get('/messages', (req, res) => {
   Message.find({},(err, messages)=> {
     res.send(messages);
   })
-})
+})``
 post : will post new messages created by the user to the database
 
-app.post('/messages', (req, res) => {
+``app.post('/messages', (req, res) => {
   var message = new Message(req.body);
   message.save((err) =>{
     if(err)
       sendStatus(500);
     res.sendStatus(200);
   })
-})
+})``
 In order to connect these routes to the front end we need to add the following code in the client side script tag in the index.html:
-
+``
 $(() => {
     $("#send").click(()=>{
        sendMessage({
@@ -184,7 +187,7 @@ function getMessages(){
  
 function sendMessage(message){
    $.post(‘http://localhost:3000/messages', message)
- }
+ }``
 Here the sendMessage is used to invoke the post route of the messages, and save a message sent by the user. The message is created when a user clicks the send button.
 
 Similarly the getMessage is used to invoke the get route of messages. This will get all the messages saved in the database and will be appended to the messages div.
@@ -194,26 +197,26 @@ The only issue now is that there is no way for the client to know if the server 
 
 To solve this we can add a push notification system that will send messages from server to client. In Node.js we use socket.io.
 
-Socket.io
+## Socket.io
 Socket.IO is a JavaScript library for realtime web applications. It enables realtime, bi-directional communication between web clients and server. It has two parts: a client-side library that runs in the browser, and a server-side library for Node.js. Socket.io enables real-time bidirectional event-based communication.
 
 To install socket.io:
 
-npm install -s socket.io
+`npm install -s socket.io`
 we also need an HTTP package for Socket.io to work:
 
 npm install -s http
 Add the following code to server.js:
-
+``
 var http = require(‘http’).Server(app);
 var io = require(‘socket.io’)(http);
 And we can create a connection:
 
 io.on(‘connection’, () =>{
  console.log(‘a user is connected’)
-})
+})``
 In the index.html add the following tag:
-
+``
 <script src=”/socket.io/socket.io.js”></script>
 Now we need to create an emit action when a message is created in server.js. So the post route becomes this:
 
@@ -230,7 +233,7 @@ And in the client side script tag in index.html, add the following code:
 
 var socket = io();
 
-socket.on(‘message’, addMessages)
+socket.on(‘message’, addMessages)``
 So each time a message is posted, the server will update the messages in the message div.
 
 6KUYtaL4L3ShtPNaHRKWXvP6v3mMuUAdq6R0
@@ -239,7 +242,7 @@ Great!!
 This is very basic application that we can create in Node.js. There is lot of scope for improvement. The finished code can be found in https://github.com/amkurian/simple-chat
 
 server.js
-
+```
 var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
@@ -283,6 +286,7 @@ app.post('/messages', (req, res) => {
 io.on('connection', () =>{
   console.log('a user is connected')
 })
+ 
 
 mongoose.connect(dbUrl ,{useMongoClient : true} ,(err) => {
   console.log('mongodb connected',err);
@@ -290,10 +294,10 @@ mongoose.connect(dbUrl ,{useMongoClient : true} ,(err) => {
 
 var server = http.listen(3001, () => {
   console.log('server is running on port', server.address().port);
-});
+});```
 Hope this was helpful in understanding some basic concepts.
 
-Some useful links
+## Some useful links
 
 Socket.IO
 SOCKET.IO 2.0 IS HERE FEATURING THE FASTEST AND MOST RELIABLE REAL-TIME ENGINE ~/Projects/tweets/index.js var io =…socket.ioExpress - Node.js web application framework
